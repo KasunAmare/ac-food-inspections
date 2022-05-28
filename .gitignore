@@ -43,3 +43,6 @@ database.yaml
 
 # streamlit
 **/.streamlit/**
+
+# direnv
+.secrets

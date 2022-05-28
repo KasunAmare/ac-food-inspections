@@ -1,8 +1,12 @@
+drop schema raw if exists cascade;
+
 create schema if not exists raw;
 
-drop table if exists raw.inspection_violations;
+--- Violations
 
-create table raw.inspection_violations (
+drop table if exists raw.violations;
+
+create table raw.violations (
     encounter varchar,
     id varchar, 
     placard_st varchar,
@@ -27,9 +31,10 @@ create table raw.inspection_violations (
 );
 
 
-drop table if exists raw.all_inspections;
+--- Inspections
+drop table if exists raw.inspections;
 
-create table raw.all_inspections (
+create table raw.inspections (
     encounter varchar,
     id varchar, 
     placard_st varchar,
@@ -56,6 +61,7 @@ create table raw.all_inspections (
 );
 
 
+--- Food facilities
 drop table if exists raw.food_facilities;
 
 create table raw.food_facilities (
@@ -82,3 +88,17 @@ create table raw.food_facilities (
     y varchar,
     address text
 );
+
+
+-- copying the data to the raw schema
+
+raise info "Copying inspections"
+\copy raw.inspections FROM '../data/alco-all-inspections.csv' CSV HEADER;
+
+raise infor "Copying restaurants"
+\copy raw.food_facilities FROM '../data/alco-all-restaurants.csv' CSV HEADER;
+
+raise info "Copying violations"
+\copy raw.violations FROM '../data/alco-restuarant-violations.csv' CSV HEADER;
+
+raise info "Copying raw inspections data: DONE!"
